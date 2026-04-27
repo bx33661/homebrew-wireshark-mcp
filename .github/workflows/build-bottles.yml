@@ -11,6 +11,7 @@ jobs:
   build:
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         include:
           - os: macos-15   # arm64 — Sequoia
@@ -21,6 +22,7 @@ jobs:
             tag: ventura
 
     runs-on: ${{ matrix.os }}
+    continue-on-error: true   # runner 资源不足时不阻塞 release job
 
     steps:
       - uses: actions/checkout@v4
@@ -60,6 +62,7 @@ jobs:
   # ── Step 2: merge JSON, publish release, commit updated formula ───────────────
   release:
     needs: build
+    if: always() && !cancelled()   # 即使部分 build 失败也继续
     runs-on: macos-latest
     permissions:
       contents: write
