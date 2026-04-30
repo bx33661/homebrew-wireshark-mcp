@@ -48,7 +48,7 @@ jobs:
         with:
           name: bottle-${{ matrix.tag }}
           path: |
-            *.bottle.tar.gz
+            *.bottle*.tar.gz
             *.bottle.json
 
   # ── Step 2: merge JSON, publish release, commit updated formula ───────────────
@@ -89,7 +89,7 @@ jobs:
           tag_name: "wireshark-mcp-${{ steps.ver.outputs.version }}"
           name: "wireshark-mcp ${{ steps.ver.outputs.version }}"
           body: "Pre-built bottles for wireshark-mcp ${{ steps.ver.outputs.version }}"
-          files: "*.bottle.tar.gz"
+          files: "*.bottle*.tar.gz"
 
       - name: Commit updated formula (with bottle block)
         run: |
@@ -98,4 +98,4 @@ jobs:
           git add Formula/wireshark-mcp.rb
           git diff --cached --quiet && echo "No formula changes" && exit 0
           git commit -m "chore: add bottles for wireshark-mcp ${{ steps.ver.outputs.version }} [skip bottles]"
-          git push
+          git push origin HEAD:main
