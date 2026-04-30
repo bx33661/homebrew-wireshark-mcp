@@ -64,14 +64,14 @@ jobs:
           # Need push access; GITHUB_TOKEN with contents:write is enough
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+
       - name: Download all bottle artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: bottle-*
           merge-multiple: true
-
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Get formula version
         id: ver
