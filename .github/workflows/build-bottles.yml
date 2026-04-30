@@ -43,6 +43,20 @@ jobs:
             --json \
             --root-url "https://github.com/bx33661/homebrew-wireshark-mcp/releases/download/wireshark-mcp-${{ steps.ver.outputs.version }}"
 
+          python3 - <<'PY'
+          import json
+          import pathlib
+
+          for json_path in pathlib.Path(".").glob("*.bottle.json"):
+              data = json.loads(json_path.read_text())
+              for formula in data.values():
+                  for tag in formula.get("bottle", {}).get("tags", {}).values():
+                      local = pathlib.Path(tag.get("local_filename", ""))
+                      expected = pathlib.Path(tag.get("filename", ""))
+                      if local and expected and local.exists() and local != expected:
+                          local.rename(expected)
+          PY
+
       - name: Upload bottle artifacts
         uses: actions/upload-artifact@v4
         with:
