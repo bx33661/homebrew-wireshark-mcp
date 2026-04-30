@@ -6,12 +6,12 @@ Usage:
     python3 generate_formula.py 1.2.0 > Formula/wireshark-mcp.rb
 """
 import json
-import subprocess
+import os
 import sys
+import subprocess
+import tempfile
 import urllib.request
 import venv
-import tempfile
-import os
 
 TEMPLATE_HEADER = """\
 class WiresharkMcp < Formula
@@ -25,10 +25,10 @@ class WiresharkMcp < Formula
 
   head "https://github.com/bx33661/Wireshark-MCP.git", branch: "main"
 
-  depends_on "python@3.12"
-  depends_on "wireshark"
   depends_on "rust" => :build
   depends_on "openssl@3"
+  depends_on "python@3.12"
+  depends_on "wireshark"
 
 """
 
@@ -39,9 +39,9 @@ TEMPLATE_FOOTER = """\
   end
 
   test do
-    output = shell_output("\#{bin}/wireshark-mcp --version 2>&1")
+    output = shell_output("#{bin}/wireshark-mcp --version 2>&1")
     assert_match version.to_s, output
-    assert_predicate Formula["wireshark"].opt_bin/"tshark", :exist?
+    assert_path_exists Formula["wireshark"].opt_bin/"tshark"
   end
 end
 """
