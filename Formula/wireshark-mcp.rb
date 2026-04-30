@@ -14,13 +14,11 @@ class WiresharkMcp < Formula
     root_url "https://github.com/bx33661/homebrew-wireshark-mcp/releases/download/wireshark-mcp-1.1.5"
   end
 
-  # ── Runtime deps ──────────────────────────────────────────────────────────────
-  depends_on "python@3.12"
-  depends_on "wireshark" # provides tshark (and optionally capinfos, editcap, …)
-
-  # ── Build deps (Rust-based wheels compile from source) ────────────────────────
+  # ── Dependencies ──────────────────────────────────────────────────────────────
   depends_on "rust" => :build
-  depends_on "openssl@3"           # required by cryptography
+  depends_on "openssl@3"
+  depends_on "python@3.12"
+  depends_on "wireshark" # provides tshark (and optionally capinfos, editcap, ...)
 
   # ── Pure-Python resources ─────────────────────────────────────────────────────
   resource "annotated_types" do
@@ -179,7 +177,6 @@ class WiresharkMcp < Formula
     output = shell_output("#{bin}/wireshark-mcp --version 2>&1")
     assert_match version.to_s, output
 
-    # Verify tshark is reachable (wireshark dep guarantees this)
-    assert_predicate Formula["wireshark"].opt_bin/"tshark", :exist?
+    assert_path_exists Formula["wireshark"].opt_bin/"tshark"
   end
 end
