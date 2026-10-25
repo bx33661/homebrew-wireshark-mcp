@@ -18,7 +18,7 @@ wireshark-mcp install
 
 ## Requirements
 
-- macOS (Homebrew)
+- macOS on Apple Silicon (Homebrew). Pre-built bottles target macOS 15 Sequoia; other versions build from source.
 - Wireshark is installed automatically as a dependency (`brew install wireshark`)
 
 ## Updating
