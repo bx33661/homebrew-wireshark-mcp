@@ -12,12 +12,11 @@ jobs:
     if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip bottles]') }}
     strategy:
       fail-fast: false
+      # macOS 14 is Homebrew Tier 3: its dependencies have no bottles, so brew refuses to build there.
       matrix:
         include:
           - os: macos-15   # arm64 — Sequoia
             tag: arm64_sequoia
-          - os: macos-14   # arm64 — Sonoma
-            tag: arm64_sonoma
 
     runs-on: ${{ matrix.os }}
 
